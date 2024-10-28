@@ -18,13 +18,34 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+type FontFileList struct {
+	files []string
+}
+
+func (l *FontFileList) String() string {
+	return strings.Join(l.files, ",")
+}
+
+func (l *FontFileList) Set(v string) error {
+	q := strings.SplitAfter(v, ",")
+	l.files = append(l.files, q...)
+	return nil
+}
+
+func (l *FontFileList) Count() int {
+	return len(l.files)
+}
+
+var fontfiles = FontFileList{
+	files: []string{},
+}
+
 var input = flag.String("i", "", "Input filename, dir consisting of .md|.markdown files or HTTP(s) URL; default is os.Stdin")
 var output = flag.String("o", "", "Output PDF filename; required")
 var pathToSyntaxFiles = flag.String("s", "", "Path to github.com/jessp01/gohighlight/syntax_files")
 var title = flag.String("title", "", "Presentation title")
 var author = flag.String("author", "", "Author; used if -footer is passed")
 var unicodeSupport = flag.String("unicode-encoding", "", "e.g 'cp1251'")
-var fontFile = flag.String("font-file", "", "path to font file to use")
 var fontName = flag.String("font-name", "", "Font name ID; e.g 'Helvetica-1251'")
 var themeArg = flag.String("theme", "light", "[light|dark]")
 var hrAsNewPage = flag.Bool("new-page-on-hr", false, "Interpret HR as a new page; useful for presentations")
@@ -65,6 +86,7 @@ func glob(dir string, validExts []string) ([]string, error) {
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	flag.Var(&fontfiles, "font-file", "path to font file(s) to use, comma-separated")
 	flag.Parse()
 
 	if *help {
@@ -159,9 +181,23 @@ func main() {
 	pf.BackgroundColor = mdtopdf.Colorlookup(backgroundColor)
 	pf.Extensions = parser.NoIntraEmphasis | parser.Tables | parser.FencedCode | parser.Autolink | parser.Strikethrough | parser.SpaceHeadings | parser.HeadingIDs | parser.BackslashLineBreak | parser.DefinitionLists
 
-	if *fontFile != "" && *fontName != "" {
-		pf.Pdf.AddFont(*fontName, "", *fontFile)
+	useCustomFont := false
+
+	if fontfiles.Count() > 0 && *fontName != "" {
+		for _, n := range fontfiles.files {
+			flag := ""
+			if true == strings.Contains(n, "Bold") {
+				flag = "B"
+			} else if true == strings.Contains(n, "Italic") {
+				flag = "I"
+			}
+
+			pf.Pdf.AddFont(*fontName, flag, n)
+		}
+
 		pf.Pdf.SetFont(*fontName, "", 12)
+		useCustomFont = true
+		pf.SetCustomFont(*fontName)
 		pf.Normal = mdtopdf.Styler{Font: *fontName, Style: "",
 			Size: 12, Spacing: 2,
 			FillColor: fillColor,
@@ -174,8 +210,12 @@ func main() {
 			pf.Pdf.SetFillColor(color.Red, color.Green, color.Blue)
 			// Position at 1.5 cm from bottom
 			pf.Pdf.SetY(-15)
-			// Arial italic 8
-			pf.Pdf.SetFont("Arial", "I", 8)
+			if useCustomFont == true {
+				pf.Pdf.SetFont(*fontName, "I", 8)
+			} else {
+				// Arial italic 8
+				pf.Pdf.SetFont("Arial", "I", 8)
+			}
 			// Text color in gray
 			pf.Pdf.SetTextColor(128, 128, 128)
 			w, h, _ := pf.Pdf.PageSize(pf.Pdf.PageNo())

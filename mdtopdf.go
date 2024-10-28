@@ -318,12 +318,12 @@ func (r *PdfRenderer) Process(content []byte) error {
 
 	err = r.Run(content)
 	if err != nil {
-		return fmt.Errorf("error on %v:%v", r.pdfFile, err)
+		return fmt.Errorf("[pdf.Run]  <%v> %v", r.pdfFile, err)
 	}
 
 	err = r.Pdf.OutputFileAndClose(r.pdfFile)
 	if err != nil {
-		return fmt.Errorf("error on %v:%v", r.pdfFile, err)
+		return fmt.Errorf("[pdf.OutputFileAndClose] <%v> %v", r.pdfFile, err)
 	}
 
 	return nil
@@ -362,6 +362,20 @@ func (r *PdfRenderer) UpdateCodeStyler() {
 // UpdateBlockquoteStyler - update Blockquote fill styler
 func (r *PdfRenderer) UpdateBlockquoteStyler() {
 	r.NeedBlockquoteStyleUpdate = true
+}
+
+func (r *PdfRenderer) SetCustomFont(fnt string) {
+	r.Normal.Font = fnt
+	r.Link.Font = fnt
+	r.Blockquote.Font = fnt
+	r.THeader.Font = fnt
+	r.TBody.Font = fnt
+	r.H1.Font = fnt
+	r.H2.Font = fnt
+	r.H3.Font = fnt
+	r.H4.Font = fnt
+	r.H5.Font = fnt
+	r.H6.Font = fnt
 }
 
 func (r *PdfRenderer) setStyler(s Styler) {

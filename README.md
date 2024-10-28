@@ -1,7 +1,10 @@
 # mdtopdf
 
-[![CI][badge-build]][build]
-[![GoDoc][go-docs-badge]][go-docs]
+
+** THIS IS A FORK **
+
+_I do not plan on merging my changes back upstream, at this point._
+
 [![License][badge-license]][license]
 
 ## Introduction: Markdown to PDF
@@ -57,12 +60,12 @@ This is a planned fix; [see here](https://github.com/mandolyte/mdtopdf/issues/1)
 
 To install the package, run the usual `go get`:
 ```
-$ go get github.com/mandolyte/mdtopdf
+$ go get github.com/samba/mdtopdf
 ```
 
 You can also install the `md2pdf` binary directly onto your `$GOBIN` dir with:
 ```
-$ go install github.com/mandolyte/mdtopdf/cmd/md2pdf@latest
+$ go install github.com/samba/mdtopdf/cmd/md2pdf@latest
 ```
 
 ## Syntax highlighting
@@ -173,36 +176,10 @@ $ go run md2pdf.go -i russian.md -o russian.pdf \
 ```
 
 
-# Note to Self
-
-In order to update `pkg.go.dev` with latest release, the following will do the trick. 
-Essentially, it is creating a module and then running the go get command for the
-desired release.
-Using the proxy will have the side effect of updating the info on the go pkg web site.
-
-```sh
-$ pwd
-/home/cecil/Downloads
-$ mkdir tmp
-$ cd tmp
-$ ls
-$ go mod init example.com/mypkg
-go: creating new go.mod: module example.com/mypkg
-$ cat go.mod 
-module example.com/mypkg
-
-go 1.20
-$ GOPROXY=https://proxy.golang.org GO111MODULE=on go get github.com/mandolyte/mdtopdf@v1.4.1
-go: added github.com/go-pdf/fpdf v0.8.0
-go: added github.com/jessp01/gohighlight v0.21.1-7
-go: added github.com/mandolyte/mdtopdf v1.4.1
-go: added github.com/gomarkdown/markdown 
-go: added gopkg.in/yaml.v2 v2.4.0
-```
 
 [license]: ./LICENSE
-[badge-license]: https://img.shields.io/github/license/mandolyte/mdtopdf.svg
-[go-docs-badge]: https://godoc.org/github.com/mandolyte/mdtopdf?status.svg
-[go-docs]: https://godoc.org/github.com/mandolyte/mdtopdf
-[badge-build]: https://github.com/mandolyte/mdtopdf/actions/workflows/go.yml/badge.svg
-[build]: https://github.com/mandolyte/mdtopdf/actions/workflows/go.yml
+[badge-license]: https://img.shields.io/github/license/samba/mdtopdf.svg
+[go-docs-badge]: https://godoc.org/github.com/samba/mdtopdf?status.svg
+[go-docs]: https://godoc.org/github.com/samba/mdtopdf
+[badge-build]: https://github.com/samba/mdtopdf/actions/workflows/go.yml/badge.svg
+[build]: https://github.com/samba/mdtopdf/actions/workflows/go.yml
