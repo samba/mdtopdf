@@ -197,11 +197,12 @@ func main() {
 
 		pf.Pdf.SetFont(*fontName, "", 12)
 		useCustomFont = true
-		pf.SetCustomFont(*fontName)
 		pf.Normal = mdtopdf.Styler{Font: *fontName, Style: "",
 			Size: 12, Spacing: 2,
 			FillColor: fillColor,
 			TextColor: textColor}
+		pf.SetCustomFont(*fontName)
+		pf.UpdateParagraphStyler(pf.Normal)
 	}
 
 	if *printFooter {

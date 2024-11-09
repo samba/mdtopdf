@@ -376,6 +376,7 @@ func (r *PdfRenderer) SetCustomFont(fnt string) {
 	r.H4.Font = fnt
 	r.H5.Font = fnt
 	r.H6.Font = fnt
+	r.setStyler(r.Normal)
 }
 
 func (r *PdfRenderer) setStyler(s Styler) {
@@ -426,9 +427,9 @@ func (r *PdfRenderer) RenderNode(w io.Writer, node ast.Node, entering bool) ast.
 		r.tracer("Hardbreak", "Output newline")
 		r.cr()
 	case *ast.Emph:
-		r.processEmph(node, entering)
+		r.processEmph(node, entering) // italic
 	case *ast.Strong:
-		r.processStrong(node, entering)
+		r.processStrong(node, entering) // bold
 	case *ast.Del:
 		if entering {
 			r.tracer("DEL (entering)", "Not handled")

@@ -281,6 +281,7 @@ func (r *PdfRenderer) processItem(node ast.ListItem, entering bool) {
 	}
 }
 
+// Italic text
 func (r *PdfRenderer) processEmph(node ast.Node, entering bool) {
 	if entering {
 		r.tracer("Emph (entering)", "")
@@ -292,6 +293,7 @@ func (r *PdfRenderer) processEmph(node ast.Node, entering bool) {
 	}
 }
 
+// Bold text
 func (r *PdfRenderer) processStrong(node ast.Node, entering bool) {
 	if entering {
 		r.tracer("Strong (entering)", "")
